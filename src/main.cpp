@@ -17,3 +17,5 @@ int myFunction(int x, int y) {
   return x + y;
 }//komen
 //komen dua
+//komen tiga
+//komen empat
