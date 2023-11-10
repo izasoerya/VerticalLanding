@@ -54,6 +54,7 @@ void BNO::readSensor() {
   //get the temperature
   temperature = bno.getTemp();
 }
+
 void BNO::printResult() {
   // Print the result
   Serial.print("Heading: ");
@@ -71,24 +72,31 @@ void BNO::printResult() {
   Serial.print("Temperature: ");
   Serial.println(temperature);
 }
+
 float BNO::getHeading() {
   return heading;
 }
+
 float BNO::getRoll() {
   return roll;
 }
+
 float BNO::getPitch() {
   return pitch;
 }
+
 float BNO::getAccelerationX() {
   return accelerationX;
 }
+
 float BNO::getAccelerationY() {
   return accelerationY;
 }
+
 float BNO::getAccelerationZ() {
   return accelerationZ;
 }
+
 float BNO::getTemperature() {
   return temperature;
 }
