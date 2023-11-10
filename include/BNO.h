@@ -29,6 +29,7 @@ class BNO{
     float accelerationX;
     float accelerationY;
     float accelerationZ;
+    float temperature;
 };
 
 #endif

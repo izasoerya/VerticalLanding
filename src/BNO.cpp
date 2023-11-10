@@ -48,6 +48,9 @@ void BNO::readSensor() {
   accelerationX = acceleration.x();
   accelerationY = acceleration.y();
   accelerationZ = acceleration.z();
+
+  //get the temperature
+  temperature = bno.getTemp();
 }
 void BNO::printResult() {
   // Print the result
@@ -81,4 +84,7 @@ float BNO::getAccelerationY() {
 }
 float BNO::getAccelerationZ() {
   return accelerationZ;
+}
+float BNO::getTemperature() {
+  return temperature;
 }
