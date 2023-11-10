@@ -57,6 +57,12 @@ void BNO::printResult() {
   Serial.print(roll);
   Serial.print(" Pitch: ");
   Serial.println(pitch);
+  Serial.print("Acceleration X: ");
+  Serial.print(accelerationX);
+  Serial.print(" Y: ");
+  Serial.print(accelerationY);
+  Serial.print(" Z: ");
+  Serial.println(accelerationZ);
 }
 float BNO::getHeading() {
   return heading;
