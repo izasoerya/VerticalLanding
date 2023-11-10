@@ -2,7 +2,6 @@
 #define SCHEDULELR_H
 
 #include <Arduino.h>
-typedef void (*TaskFunction)();  // Define a typedef for the function pointer type
 
 class TaskScheduler{
 private:
@@ -10,6 +9,7 @@ private:
     uint16_t delay;
     uint8_t idTask;
     uint32_t prevMillis = 0;
+    typedef void (*TaskFunction)();  // Define a typedef for the function pointer type
     TaskFunction taskFunc;
     bool isSuspended = false;  
 
