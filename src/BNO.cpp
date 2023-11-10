@@ -68,6 +68,8 @@ void BNO::printResult() {
   Serial.print(accelerationY);
   Serial.print(" Z: ");
   Serial.println(accelerationZ);
+  Serial.print("Temperature: ");
+  Serial.println(temperature);
 }
 float BNO::getHeading() {
   return heading;
