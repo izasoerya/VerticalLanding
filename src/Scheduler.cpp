@@ -12,8 +12,7 @@ void TaskScheduler::runTask()
 {
     if(millis() - prevMillis > delay && !isSuspended)
     {
-        void (*theTask)() = reinterpret_cast<void (*)(void)>(theTask);
-        theTask();
+        taskFunc();
         prevMillis = millis();
     }  
 }
