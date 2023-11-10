@@ -2,6 +2,7 @@
 #define SCHEDULELR_H
 
 #include <Arduino.h>
+typedef void (*TaskFunction)();  // Define a typedef for the function pointer type
 
 class TaskScheduler{
 private:
@@ -9,13 +10,14 @@ private:
     uint16_t delay;
     uint8_t idTask;
     uint32_t prevMillis = 0;
-    void *theTask;    
+    TaskFunction taskFunc;
+    bool isSuspended = false;  
 
 public:
-    TaskScheduler(uint8_t idTask, String name, uint16_t delay, void (*theTask)());
-    void runTask(uint8_t idTask);
-    void suspendTask(uint8_t idTask);
-    void resumeTask(uint8_t idTask);
+    TaskScheduler(uint8_t idTask, String name, uint16_t delay, TaskFunction taskFunc);
+    void runTask();
+    void suspendTask();
+    void resumeTask();
 };
 
 #endif

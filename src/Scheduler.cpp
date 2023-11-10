@@ -1,19 +1,29 @@
 #include "Scheduler.h"
 
-TaskScheduler::TaskScheduler(uint8_t idTask, String name, uint16_t delay, void (*theTask)())
+TaskScheduler::TaskScheduler(uint8_t idTask, String name, uint16_t delay, TaskFunction taskFunc)
 {
     this -> idTask = idTask;
     this -> name = name;
     this -> delay = delay;
-    this -> theTask = theTask;
+    this -> taskFunc = taskFunc;
 }
 
-void TaskScheduler::runTask(uint8_t idTask)
+void TaskScheduler::runTask()
 {
-    if(millis() - prevMillis > delay)
+    if(millis() - prevMillis > delay && !isSuspended)
     {
         void (*theTask)() = reinterpret_cast<void (*)(void)>(theTask);
         theTask();
         prevMillis = millis();
     }  
+}
+
+void TaskScheduler::suspendTask()
+{
+    isSuspended = true;
+}
+
+void TaskScheduler::resumeTask()
+{
+    isSuspended = false;
 }
