@@ -5,11 +5,11 @@
 
 class TaskScheduler{
 private:
+    typedef void (*TaskFunction)();  // Define a typedef for the function pointer type
     String name;
     uint16_t delay;
     uint8_t idTask;
     uint32_t prevMillis = 0;
-    typedef void (*TaskFunction)();  // Define a typedef for the function pointer type
     TaskFunction taskFunc;
     bool isSuspended = false;  
 
