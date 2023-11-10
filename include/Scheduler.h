@@ -5,20 +5,14 @@
 
 class TaskScheduler{
 private:
-    struct createTaskParam
-    {
-        String name;
-        uint16_t delay;
-        uint8_t idTask;
-        uint32_t prevMillis = 0;
-        void *theTask;
-    };
-    createTaskParam taskData[24]; 
-    uint8_t iterationTask = 0;
+    String name;
+    uint16_t delay;
+    uint8_t idTask;
+    uint32_t prevMillis = 0;
+    void *theTask;    
 
 public:
-    TaskScheduler();
-    void createTask(uint8_t idTask, String name, uint16_t delay, void (*thisF)());
+    TaskScheduler(uint8_t idTask, String name, uint16_t delay, void (*theTask)());
     void runTask(uint8_t idTask);
     void suspendTask(uint8_t idTask);
     void resumeTask(uint8_t idTask);
