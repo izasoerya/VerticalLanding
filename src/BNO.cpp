@@ -16,7 +16,7 @@ void BNO::calibrate() {
   // Calibrate the BNO sensor
   imu::Vector<3> euler;
   //wait for 2 second till the sensor is stable
-  for(int i = 0; i < 30; i++) {
+  for(int i = 0; i < 20; i++) {
     euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
     delay(100);
   }
