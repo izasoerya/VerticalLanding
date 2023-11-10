@@ -1,6 +1,8 @@
 #include "BNO.h"
 
-BNO::BNO() {}
+BNO::BNO() {
+  bno = Adafruit_BNO055(55, 0x28);
+}
 
 void BNO::begin() {
   // Initialize the BNO sensor
