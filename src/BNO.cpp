@@ -4,6 +4,10 @@ BNO::BNO() {
   bno = Adafruit_BNO055(55, 0x28);
 }
 
+BNO::BNO(int address) {
+  bno = Adafruit_BNO055(55, address);
+}
+
 void BNO::begin() {
   // Initialize the BNO sensor
   if(!bno.begin()) {
@@ -14,37 +18,31 @@ void BNO::begin() {
 
 void BNO::calibrate() {
   // Calibrate the BNO sensor
+  imu::Quaternion quat = bno.getQuat();
   imu::Vector<3> euler;
+  quat.normalize();
   //wait for 2 second till the sensor is stable
   for(int i = 0; i < 20; i++) {
-    euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+    quat = bno.getQuat();
+    quat.normalize();
+    euler = quat.toEuler();
     delay(100);
   }
-  headingOffset = euler.x();
-  rollOffset = euler.y();
-  pitchOffset = euler.z();
+  yawOffset = euler.x() * 180 / M_PI;
+  pitchOffset = euler.y() * 180 / M_PI;
+  rollOffset = euler.z() * 180 / M_PI;
 }
 
 void BNO::readSensor() {
   // Get new data from the BNO sensor
   //Get the orientation angles
-  imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  heading = euler.x() - headingOffset;
-  roll = euler.y() - rollOffset;
-  pitch = euler.z() - pitchOffset;
-
-  if(heading < 0) {
-    heading = 360 + heading;
-  }
-
-  if(roll < 0) {
-    roll = 360 + roll;
-  }
-
-  if(pitch < 0) {
-    pitch = 360 + pitch;
-  }
-
+  imu::Quaternion quat = bno.getQuat();
+  quat.normalize();
+  imu::Vector<3> euler = quat.toEuler();
+  yaw = euler.x() * 180 / M_PI - yawOffset;
+  pitch = euler.y() * 180 / M_PI - pitchOffset;
+  roll = euler.z() * 180 / M_PI - rollOffset;
+  
   //get the acceleration data
   imu::Vector<3> acceleration = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER);
   accelerationX = acceleration.x();
@@ -57,8 +55,8 @@ void BNO::readSensor() {
 
 void BNO::printResult() {
   // Print the result
-  Serial.print("Heading: ");
-  Serial.print(heading);
+  Serial.print("Yaw: ");
+  Serial.print(yaw);
   Serial.print(" Roll: ");
   Serial.print(roll);
   Serial.print(" Pitch: ");
@@ -73,8 +71,8 @@ void BNO::printResult() {
   Serial.println(temperature);
 }
 
-float BNO::getHeading() {
-  return heading;
+float BNO::getYaw() {
+  return yaw;
 }
 
 float BNO::getRoll() {
