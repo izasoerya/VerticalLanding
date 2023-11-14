@@ -2,15 +2,17 @@
 #define BNO_H
 
 #include <Adafruit_BNO055.h>
+#include <quaternion.h>
 
 class BNO{
   public:
     BNO();
+    BNO(int address);
     void begin();
     void calibrate();
     void readSensor();
     void printResult();
-    float getHeading();
+    float getYaw();
     float getRoll();
     float getPitch();
     float getAccelerationX();
@@ -20,12 +22,12 @@ class BNO{
     
   private:
     Adafruit_BNO055 bno;
-    float heading;
+    float yaw;
     float roll;
     float pitch;
-    float headingOffset;
-    float rollOffset;
+    float yawOffset;
     float pitchOffset;
+    float rollOffset;
     float accelerationX;
     float accelerationY;
     float accelerationZ;
