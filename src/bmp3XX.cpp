@@ -1,21 +1,35 @@
+#include <Arduino.h>
 #include "bmp3XX.h"
+#define SEALEVELPRESSURE_HPA (1013.25)
+SensorBMP::SensorBMP():bmp(Adafruit_BMP3XX()){}
 
-BMP3XX::BMP3XX(){
-    _meas_end = 0;
-  _filterEnabled = _tempOSEnabled = _presOSEnabled = false;
+bool SensorBMP::begin() 
+{
+    if (!bmp.begin_I2C()) 
+    {
+        return false;
+    }
+    else
+    {
+        bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
+        bmp.setPressureOversampling(BMP3_OVERSAMPLING_4X);
+        bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
+        bmp.setOutputDataRate(BMP3_ODR_50_HZ);
+        return true;        
+    }
 }
 
-bool BMP3XX::begin_I2C(uint8_t addr, TwoWire *theWire) {
-  if (i2c_dev)
-    delete i2c_dev;
-  if (spi_dev)
-    delete spi_dev;
-  spi_dev = NULL;
+float SensorBMP::getTemperature()
+{
+    return bmp.temperature;
 }
-bool BMP3XX::begin_SPI(uint8_t cs_pin, SPIClass *theSPI) {
-  if (i2c_dev)
-    delete i2c_dev;
-  if (spi_dev)
-    delete spi_dev;
-  i2c_dev = NULL;
+
+float SensorBMP::getPressure()
+{
+    return bmp.pressure;
+}
+
+float SensorBMP::getAltitude()
+{
+    return bmp.readAltitude(SEALEVELPRESSURE_HPA);
 }
