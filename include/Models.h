@@ -14,7 +14,7 @@ struct DataType
     float angleY;
     float angleZ;
     float altitude;
-    rocketState state;
+    char *state;
 };
 
 #endif

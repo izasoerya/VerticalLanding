@@ -26,9 +26,19 @@ void loop()
 
 void dataBMEFunc()
 {
-  Serial.println("dataMPUFunc");
 }
 
 void dataBNOFunc()
 {
+  bno.readSensor();
+  float angleX = bno.getRoll();
+  float angleY = bno.getPitch();
+  float angleZ = bno.getYaw();
+
+  Serial.print("Roll: ");
+  Serial.print(angleX);
+  Serial.print(" Pitch: ");
+  Serial.print(angleY);
+  Serial.print(" Yaw: ");
+  Serial.println(angleZ);
 }
