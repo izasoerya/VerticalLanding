@@ -3,15 +3,17 @@
 
 #include "SparkFunBME280.h"
 
-class BME280{
-    public:
-    BME280();
-    bool begin();
-    float readTempC();
-    float readFloatPressure();
-    float readFloatAltitudeFeet();
+class BME
+{
+private:
+    BME280 bme;
+
+public:
+    BME();
+    void begin();
+    float getTemperature();
+    float getPressure();
+    float getAltitude();
 };
 
 #endif
-
-
