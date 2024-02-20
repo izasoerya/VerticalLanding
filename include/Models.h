@@ -8,7 +8,7 @@ enum rocketState
     landing = 3,
 };
 
-class DataType
+struct DataType
 {
     float angleX;
     float angleY;
