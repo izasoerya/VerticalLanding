@@ -1,20 +1,34 @@
 #include <Arduino.h>
-#include <Models.h>
+#include <Scheduler.h>
+#include "BNO.h"
 
-void setup() {
+void dataBMEFunc();
+void dataBNOFunc();
+
+TaskScheduler dataBME(1, "dataMPU", 1000, dataBMEFunc);
+TaskScheduler dataBNO(2, "dataBNO", 1000, dataBNOFunc);
+BNO bno;
+
+void setup()
+{
   // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(9600);
+  bno.begin();
+  bno.calibrate();
 }
 
-void loop() {
+void loop()
+{
   // put your main code here, to run repeatedly:
-
+  dataBME.runTask();
+  dataBNO.runTask();
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}//komen
-//komen dua
-//komen tiga
-//komen empat
+void dataBMEFunc()
+{
+  Serial.println("dataMPUFunc");
+}
+
+void dataBNOFunc()
+{
+}

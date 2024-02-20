@@ -186,9 +186,9 @@ def main():
     # Q has positive values along the diagonal and zeros elsewhere.
     # Q enables us to target states where we want low error by making the 
     # corresponding value of Q large.
-    Q = np.array([[0.639, 0, 0],  # Penalize X position error 
-                                [0, 1.0, 0],  # Penalize Y position error 
-                                [0, 0, 1.0]]) # Penalize YAW ANGLE heading error 
+    Q = np.array([[0.9, 0, 0],  # Penalize X position error 
+                                [0, 1.40, 0],  # Penalize Y position error 
+                                [0, 0, 1.40]]) # Penalize YAW ANGLE heading error 
                    
     # Launch the robot, and have it move to the desired goal destination
     for i in range(100):
