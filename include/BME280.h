@@ -11,6 +11,7 @@ private:
 public:
     BME();
     void begin();
+    void setCurrentPressure();
     float getTemperature();
     float getPressure();
     float getAltitude();

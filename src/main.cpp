@@ -18,6 +18,8 @@ void setup()
   bno.begin();
   bno.calibrate();
   bme.begin();
+  bme.getTemperature();
+  bme.setCurrentPressure();
 }
 
 void loop()

@@ -23,7 +23,12 @@ float BME::getPressure()
   return bme.readFloatPressure();
 }
 
+void BME::setCurrentPressure()
+{
+  bme.setReferencePressure(bme.readFloatPressure());
+}
+
 float BME::getAltitude()
 {
-  return bme.readFloatAltitudeFeet();
+  return bme.readFloatAltitudeMeters();
 }
