@@ -20,7 +20,9 @@ public:
     bool begin();
     float getTemperature();
     float getPressure();
-    float getAltitude();
+    float getAltitude(float basePressure);
+    bool getSensorStatus();
+
 };
 
 #endif
