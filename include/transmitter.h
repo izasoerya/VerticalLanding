@@ -12,7 +12,9 @@ public:
     ~LoraDevice();
 
     void sendMessage(HardwareSerial &Lora, String message);
-    String constructMessage(DataType data);
+    String constructMessage(FlightData data);
+
+    
     void receiveMessage();
 };
 

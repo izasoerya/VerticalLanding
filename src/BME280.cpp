@@ -25,7 +25,12 @@ float BME::getPressure()
 
 void BME::setCurrentPressure()
 {
-  bme.setReferencePressure(bme.readFloatPressure());
+  int i = 0;
+  while (i < 10)
+  {
+    bme.setReferencePressure(bme.readFloatPressure());
+    i++;
+  }
 }
 
 float BME::getAltitude()

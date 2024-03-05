@@ -3,9 +3,9 @@
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-SensorBMP::SensorBMP():bmp(Adafruit_BMP3XX()){}
+BMP::BMP():bmp(Adafruit_BMP3XX()){}
 
-bool SensorBMP::begin() 
+bool BMP::begin() 
 {
     if (!bmp.begin_I2C()) 
     {
@@ -14,29 +14,29 @@ bool SensorBMP::begin()
     else
     {
         bmp.setTemperatureOversampling(BMP3_OVERSAMPLING_8X);
-        bmp.setPressureOversampling(BMP3_OVERSAMPLING_16X);
+        bmp.setPressureOversampling(BMP3_OVERSAMPLING_8X);
         bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
         bmp.setOutputDataRate(BMP3_ODR_50_HZ);
         return true;        
     }
 }
 
-float SensorBMP::getTemperature()
+float BMP::getTemperature()
 {
     return bmp.temperature;
 }
 
-float SensorBMP::getPressure()
+float BMP::getPressure()
 {
     return bmp.pressure;
 }
 
-float SensorBMP::getAltitude(float basePressure)
+float BMP::getAltitude(float basePressure)
 {
     return bmp.readAltitude(basePressure);
 }
 
-bool SensorBMP::getSensorStatus()
+bool BMP::getSensorStatus()
 {
     return bmp.performReading();
 }

@@ -3,16 +3,14 @@
 LoraDevice::LoraDevice() {}
 LoraDevice::~LoraDevice() {}
 
-String LoraDevice::constructMessage(DataType data)
+String LoraDevice::constructMessage(FlightData data)
 {
     char buffer[64];
     snprintf(buffer, sizeof(buffer),
-             "%s,"
              "%.2f,%.2f,%.2f,"
              "%.2f",
-             data.state,
              data.angleX, data.angleY, data.angleZ,
-             data.altitude);
+             data.altitudeBME);
     return buffer;
 }
 

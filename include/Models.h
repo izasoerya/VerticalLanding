@@ -8,13 +8,18 @@ enum rocketState
     landing = 3,
 };
 
-struct DataType
+struct FlightData
 {
     float angleX;
     float angleY;
     float angleZ;
-    float altitude;
-    char *state;
+    float altitudeBMP;
+    float temperatureBMP;
+    float pressureBMP;
+    float altitudeBME;
+    float temperatureBME;
+    float basePressure;
+    float pressureBME;
 };
 
 #endif

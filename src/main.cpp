@@ -3,20 +3,22 @@
 #include "BNO.h"
 #include "BME280.h"
 #include "bmp3XX.h"
+#include "Models.h"
 
 void dataBMEFunc();
 void dataBNOFunc();
 void dataBMPFunc();
+void printDataFunc();
 
-TaskScheduler dataBME(1, "dataBME", 1000, dataBMEFunc);
-TaskScheduler dataBMP(2, "dataBMP", 1000, dataBMPFunc);
-TaskScheduler dataBNO(3, "dataBNO", 1000, dataBNOFunc);
+TaskScheduler dataBME(1, "dataBME", 100, dataBMEFunc);
+TaskScheduler dataBMP(2, "dataBMP", 100, dataBMPFunc);
+TaskScheduler dataBNO(3, "dataBNO", 100, dataBNOFunc);
+TaskScheduler printData(3, "PrintData", 1000, printDataFunc);
 
 BNO bno;
 BME bme;
-SensorBMP bmp;
-float basePressure;
-int i = 0;
+BMP bmp;
+FlightData data;
 
 void setup()
 {
@@ -29,7 +31,9 @@ void setup()
     bme.setCurrentPressure();
     bmp.begin();
     bmp.getTemperature();
-    basePressure = bme.getPressure();
+    float pressure = bmp.getPressure();
+    data.basePressure = bme.getPressure();
+    Serial.println("base pressure: " + String(data.basePressure));
 }
 
 void loop()
@@ -38,53 +42,36 @@ void loop()
     dataBME.runTask();
     dataBNO.runTask();
     dataBMP.runTask();
+    printData.runTask();
 }
 
 void dataBMEFunc()
 {
-    float temperature = bme.getTemperature();
-    float pressure = bme.getPressure();
-    float altitude = bme.getAltitude();
-
-    Serial.println("====== BME280 ======");
-    Serial.print("Temperature: ");
-    Serial.print(temperature);
-    Serial.print(" Pressure: ");
-    Serial.print(pressure);
-    Serial.print(" Altitude: ");
-    Serial.println(altitude);
-    Serial.println();
+    data.temperatureBME = bme.getTemperature();
+    data.pressureBME = bme.getPressure();
+    data.altitudeBME = bme.getAltitude();
 }
 
 void dataBNOFunc()
 {
     bno.readSensor();
-    float angleX = bno.getRoll();
-    float angleY = bno.getPitch();
-    float angleZ = bno.getYaw();
-
-    Serial.println("====== BNO055 ======");
-    Serial.print("Roll: ");
-    Serial.print(angleX);
-    Serial.print(" Pitch: ");
-    Serial.print(angleY);
-    Serial.print(" Yaw: ");
-    Serial.println(angleZ);
-    Serial.println();
+    data.angleX = bno.getRoll();
+    data.angleY = bno.getPitch();
+    data.angleZ = bno.getYaw();
 }
 
 void dataBMPFunc()
 {
-    float temperature = bmp.getTemperature();
-    float pressure = bmp.getPressure();
-    float altitude = bmp.getAltitude(basePressure / 100.0F);
+    data.temperatureBMP = bmp.getTemperature();
+    data.pressureBMP = bmp.getPressure();
+    data.altitudeBMP = bmp.getAltitude(data.basePressure / 100.0F);
+}
 
-    Serial.println("====== BMP388 ======");
-    Serial.print("Temperature: ");
-    Serial.print(temperature);
-    Serial.print(" Pressure: ");
-    Serial.print(pressure);
-    Serial.print(" Altitude: ");
-    Serial.println(altitude);
-    Serial.println();
+void printDataFunc()
+{
+    char buffer[256];
+    snprintf(buffer, sizeof(buffer),
+             "BME280: Temp %0.1f, Press %0.1f, Alti %0.1f,     BMP388: Temp %0.1f, Press %0.1f, Alti %0.1f       BNO055: Roll %0.1f, Pitch %0.1f, Yaw %0.1f,",
+             data.temperatureBME, data.pressureBME, data.altitudeBME, data.temperatureBMP, data.pressureBMP, data.altitudeBMP, data.angleX, data.angleY, data.angleZ);
+    Serial.println(String(buffer));
 }

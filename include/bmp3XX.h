@@ -5,7 +5,7 @@
 #include <math.h>
 
 
-class SensorBMP {
+class BMP {
 private:
     Adafruit_BMP3XX bmp;
     struct kalmanVar {
@@ -16,7 +16,7 @@ private:
     };
     float ePressure;
 public:
-    SensorBMP();
+    BMP();
     bool begin();
     float getTemperature();
     float getPressure();
