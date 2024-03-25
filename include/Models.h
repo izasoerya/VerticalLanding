@@ -1,7 +1,7 @@
 #ifndef MODELS_H
 #define MODELS_H
 
-enum rocketState
+enum RocketState
 {
     initialization = 1,
     flying = 2,
@@ -20,6 +20,7 @@ struct FlightData
     float temperatureBME;
     float basePressure;
     float pressureBME;
+    int counter = 0;
 };
 
 #endif

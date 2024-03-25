@@ -9,29 +9,42 @@ void dataBMEFunc();
 void dataBNOFunc();
 void dataBMPFunc();
 void printDataFunc();
+void loraTransmitFunc(){};
+void loraReceiveFunc(){};
+void thrusterControlFunc();
 
 TaskScheduler dataBME(1, "dataBME", 100, dataBMEFunc);
 TaskScheduler dataBMP(2, "dataBMP", 100, dataBMPFunc);
 TaskScheduler dataBNO(3, "dataBNO", 100, dataBNOFunc);
-TaskScheduler printData(3, "PrintData", 1000, printDataFunc);
+TaskScheduler logData(3, "PrintData", 1000, printDataFunc);
+TaskScheduler loraTransmit(4, "loraTask", 1000, loraTransmitFunc);
+TaskScheduler loraReceive(5, "loraReceive", 1000, loraReceiveFunc);
+TaskScheduler thrusterControl(6, "thrusterControl", 10, thrusterControlFunc);
 
 BNO bno;
 BME bme;
 BMP bmp;
 FlightData data;
+RocketState currentState;
+float bmpBasePressure;
 
 void setup()
 {
-    // put your setup code here, to run once:
     Serial.begin(9600);
     bno.begin();
     bno.calibrate();
+
+    bmp.begin() ? Serial.println("BMP388 initialized") : Serial.println("BMP388 failed to initialize");
+    bmp.getTemperature();
+    bmp.getPressure();
+    bmp.getAltitude(1013.25);
+
     bme.begin();
     bme.getTemperature();
+    bme.getPressure();
     bme.setCurrentPressure();
-    bmp.begin();
-    bmp.getTemperature();
-    float pressure = bmp.getPressure();
+
+    currentState = initialization;
     data.basePressure = bme.getPressure();
     Serial.println("base pressure: " + String(data.basePressure));
 }
@@ -42,7 +55,7 @@ void loop()
     dataBME.runTask();
     dataBNO.runTask();
     dataBMP.runTask();
-    printData.runTask();
+    logData.runTask();
 }
 
 void dataBMEFunc()
@@ -62,9 +75,14 @@ void dataBNOFunc()
 
 void dataBMPFunc()
 {
-    data.temperatureBMP = bmp.getTemperature();
-    data.pressureBMP = bmp.getPressure();
-    data.altitudeBMP = bmp.getAltitude(data.basePressure / 100.0F);
+    data.counter++;
+    if (data.counter > 2)
+    {
+        bmp.getSensorStatus();
+        data.temperatureBMP = bmp.getTemperature();
+        data.pressureBMP = bmp.getPressure();
+        data.altitudeBMP = bmp.getAltitude(bmpBasePressure / 100.0F);
+    }
 }
 
 void printDataFunc()
@@ -74,4 +92,12 @@ void printDataFunc()
              "BME280: Temp %0.1f, Press %0.1f, Alti %0.1f,     BMP388: Temp %0.1f, Press %0.1f, Alti %0.1f       BNO055: Roll %0.1f, Pitch %0.1f, Yaw %0.1f,",
              data.temperatureBME, data.pressureBME, data.altitudeBME, data.temperatureBMP, data.pressureBMP, data.altitudeBMP, data.angleX, data.angleY, data.angleZ);
     Serial.println(String(buffer));
+}
+
+void thrusterControlFunc()
+{
+    if (currentState == flying)
+    {
+        // control thrusters
+    }
 }
